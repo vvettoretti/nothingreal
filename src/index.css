@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #131217;
+  --color-card: #1c1b22;
+  --color-card-2: #23222b;
+  --color-line: #2c2b35;
+  --color-fg: #ededf0;
+  --color-muted: #9d9ca8;
+  --color-dim: #6b6a76;
+  --color-violet: #a78bfa;
+  --color-pink: #ec6fb0;
+  --color-gold: #d9a95b;
+  --color-red: #f07178;
+  --color-green: #7fd1a8;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-violet) 35%, transparent);
+}
+
+.katex {
+  font-size: 1.08em;
+}
+
+/* testo dei contenuti */
+.prose-nr {
+  color: #c9c8d2;
+  font-size: 16px;
+  line-height: 1.75;
+}
+.prose-nr p {
+  margin: 0.9em 0;
+}
+.prose-nr h3 {
+  margin: 2em 0 0.4em;
+  color: var(--color-fg);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.prose-nr ul,
+.prose-nr ol {
+  margin: 0.8em 0;
+  padding-left: 1.3em;
+}
+.prose-nr ul {
+  list-style: none;
+}
+.prose-nr ul li {
+  position: relative;
+}
+.prose-nr ul li::before {
+  content: "";
+  position: absolute;
+  left: -1em;
+  top: 0.75em;
+  width: 5px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--color-violet);
+}
+.prose-nr ol {
+  list-style: decimal;
+}
+.prose-nr li {
+  margin: 0.35em 0;
+}
+.prose-nr li::marker {
+  color: var(--color-muted);
+}
+
+/* slider */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--color-line);
+  outline: none;
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  background: var(--color-violet);
+  border: 2px solid #fff;
+  cursor: grab;
+}
+.range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 99px;
+  background: var(--color-violet);
+  border: 2px solid #fff;
+  cursor: grab;
+}
+
+select option {
+  background: var(--color-card);
+}
