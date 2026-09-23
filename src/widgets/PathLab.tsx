@@ -80,7 +80,7 @@ export default function PathLab() {
           { label: 'differenza / 2πi', value: fmt([d[1] / (2 * Math.PI), -d[0] / (2 * Math.PI)], 3) },
         ]}
       />
-      <Hint>{String.raw`Deformare un cammino senza attraversare singolarità non cambia l'integrale (invarianza omotopica). Per $1/z$, "differenza$/2\pi i$" è proprio l'indice di $\gamma_1\cup\gamma_2^-$ rispetto a 0.`}</Hint>
+      <Hint>{String.raw`Se la regione tra i due cammini non contiene singolarità, l'integrale sulla curva chiusa è nullo (teorema di Cauchy) e i due cammini danno lo stesso risultato. Per $1/z$, "differenza$/2\pi i$" è proprio l'indice di $\gamma_1\cup\gamma_2^-$ rispetto a 0.`}</Hint>
     </Widget>
   )
 }

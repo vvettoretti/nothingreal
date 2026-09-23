@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import ConceptMap from '../components/ConceptMap'
 import { chapters } from '../topics'
 
 export default function Home() {
@@ -35,6 +36,15 @@ export default function Home() {
               </Link>
             ))}
           </div>
+          {c.n === 1 && (
+            <div className="mt-10 rounded-2xl border border-line bg-card/40 px-4 py-8 sm:px-8">
+              <div className="mb-1 text-center text-lg font-bold text-fg">Mappa del capitolo</div>
+              <p className="mx-auto mb-6 max-w-xl text-center text-[14px] text-muted">
+                Come si concatenano i risultati. Ogni riquadro porta alla pagina corrispondente.
+              </p>
+              <ConceptMap />
+            </div>
+          )}
         </section>
       ))}
     </div>

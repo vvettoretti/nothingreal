@@ -1,36 +1,45 @@
 import { Box, Prose } from '../../components/Math'
 import CurveLab from '../../widgets/CurveLab'
+import SimplyConnectedGallery from '../../widgets/SimplyConnectedGallery'
 
 export default function CurveJordan() {
   return (
     <>
-      <Box kind="richiamo" title="Lessico delle curve">
+      <Box kind="definizione" title="Lessico dei cammini">
         {String.raw`
-Una **curva** è una $\gamma:[a,b]\to\C$ continua. Il **sostegno** $\gamma^* = \gamma([a,b])$ è l'insieme dei punti, la curva è il sostegno insieme al modo di percorrerlo. È **chiusa** se $\gamma(a)=\gamma(b)$, **semplice** se è iniettiva su $[a,b)$, **regolare** se $C^1$ con $\gamma'\neq 0$, **regolare a tratti** se lo è su un numero finito di sottointervalli. Due parametrizzazioni sono **equivalenti** se differiscono per un cambio di parametro $C^1$ con derivata positiva. Gli integrali di linea dipendono solo dalla classe di equivalenza e cambiano segno con l'orientamento opposto, $\gamma^-(t) = \gamma(a+b-t)$.
+- **Cammino**: $\gamma:[a,b]\to\C$ continua. Il **sostegno** è l'insieme $\gamma([a,b])$, la parametrizzazione fissa anche il **verso** (da $\gamma(a)$ a $\gamma(b)$).
+- **Regolare**: $\gamma\in C^1$ con $\gamma'(t)\neq0$. **Regolare a tratti**: continua e regolare su un numero finito di sottointervalli.
+- **Circuito**: cammino chiuso, $\gamma(a)=\gamma(b)$. Il verso positivo è quello antiorario.
+- **Semplice**: $\gamma(t_1)\neq\gamma(t_2)$ per $t_1\neq t_2$, tranne al più gli estremi.
+- Notazioni: $[z_0,z_1]$ è il segmento $tz_1+(1-t)z_0$, $C_r(z_0)$ è la circonferenza $z_0+re^{it}$ con $t\in[0,2\pi]$, e $C_r^{\pm}(z_0)$ sono le semicirconferenze superiore e inferiore.
 `}
       </Box>
 
       <Box kind="teorema" title="Jordan">
         {String.raw`
-Se $\gamma$ è una curva chiusa semplice (curva di Jordan), allora $\C\setminus\gamma^*$ ha esattamente **due componenti connesse**, una limitata (l'interno $I(\gamma)$) e una illimitata (l'esterno $E(\gamma)$), e $\gamma^*$ è la frontiera di entrambe.
+Un circuito semplice e regolare a tratti $\gamma$ divide il piano in **due aperti connessi**: l'**interno** (limitato) e l'**esterno** (illimitato). Il sostegno di $\gamma$ è la loro frontiera comune.
 `}
       </Box>
 
       <Prose>{String.raw`
-L'enunciato sembra ovvio, e per curve regolari a tratti lo è abbastanza. Per curve solo continue la dimostrazione è difficile, perché esistono curve di Jordan con area positiva (curve di Osgood). Per il corso conta soprattutto come si usa: permette di parlare di "regione racchiusa da $\gamma$" e di **orientamento positivo** (antiorario: l'interno resta a sinistra), che sono le ipotesi del teorema di Cauchy e del teorema dei residui.
-
-Lo strumento che rende quantitativo "stare dentro" è l'**indice di avvolgimento**:
-$$\Ind_\gamma(z_0) = \frac{1}{2\pi i}\oint_\gamma\frac{dz}{z-z_0}\in\Z,\qquad z_0\notin\gamma^*.$$
-Conta quante volte, al netto dei versi, $\gamma$ gira attorno a $z_0$: è la variazione totale di $\arg(z-z_0)$ divisa per $2\pi$. È costante sulle componenti connesse di $\C\setminus\gamma^*$ ed è nullo su quella illimitata. Per una curva di Jordan orientata positivamente vale $1$ dentro e $0$ fuori.
+L'enunciato sembra ovvio. Per il corso conta come si usa: permette di parlare di "interno di $\gamma$", che è l'ipotesi chiave dei teoremi di Cauchy e del teorema dei residui. Nel teorema dei residui compare l'**indice** $I(\gamma,z_0)$, che per un circuito semplice antiorario vale $1$ se $z_0$ è interno e $0$ se è esterno. In generale conta quante volte $\gamma$ gira attorno a $z_0$:
+$$I(\gamma,z_0) = \frac{1}{2\pi i}\int_\gamma\frac{dz}{z-z_0}.$$
+Il widget colora ogni punto del piano con questo numero. Prova anche le curve non semplici, per vedere che cosa cambia.
 `}</Prose>
 
       <CurveLab />
 
+      <Box kind="definizione" title="Aperto semplicemente connesso">
+        {String.raw`
+Un aperto **connesso** $A$ è **semplicemente connesso** se, per ogni circuito semplice $\gamma$ con sostegno in $A$, anche l'**interno** di $\gamma$ è contenuto in $A$. Intuitivamente, $A$ non ha buchi.
+`}
+      </Box>
+
+      <SimplyConnectedGallery />
+
       <Box kind="osservazione">
         {String.raw`
-- Quando i teoremi dicono "per ogni curva chiusa semplice orientata positivamente contenuta in $\Omega$ il cui interno è contenuto in $\Omega$", l'ultima condizione è essenziale: la circonferenza unitaria sta in $\C\setminus\{0\}$, ma il suo interno no. Per questo $\oint dz/z = 2\pi i\neq 0$.
-- **Semplicemente connesso** (aperto connesso in cui ogni curva chiusa è omotopa a un punto) equivale, nel piano, a: l'interno di ogni curva di Jordan in $\Omega$ sta in $\Omega$. Ancora equivalente: $\Ind_\gamma(z) = 0$ per ogni $\gamma$ chiusa in $\Omega$ e ogni $z\notin\Omega$. È questa l'ipotesi "giusta" per il teorema di Cauchy.
-- Con curve non semplici i teoremi dei residui restano validi se si pesa ogni singolarità con il suo indice: $\oint_\gamma f = 2\pi i\sum_k \Ind_\gamma(z_k)\Res(f,z_k)$.
+La condizione "l'interno di $\gamma$ sta in $A$" è essenziale: la circonferenza unitaria sta in $\C\setminus\{0\}$, ma il suo interno no. Per questo $\int_{C_1(0)} dz/z = 2\pi i\neq 0$ anche se $1/z$ è olomorfa lungo tutta la curva.
 `}
       </Box>
     </>
