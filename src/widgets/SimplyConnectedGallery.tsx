@@ -24,14 +24,22 @@ const TILES: Tile[] = [
   {
     title: '$\\C\\setminus\\{\\text{semiretta}\\}$',
     ok: true,
-    why: 'Nessun circuito può girare attorno al taglio senza attraversarlo.',
+    why: 'Il taglio arriva fino all’infinito: per racchiuderne un punto (in rosso) il circuito dovrebbe attraversarlo. I circuiti ammessi (viola) non hanno buchi dentro.',
     hole: <line x1={cx} y1={cy} x2={W} y2={cy} className={removed} strokeWidth={5} />,
-    loop: <ellipse cx={cx - 45} cy={cy} rx={34} ry={28} className="fill-violet/20 stroke-violet" strokeWidth={1.8} strokeDasharray="5 4" />,
+    loop: (
+      <>
+        <ellipse cx={cx - 52} cy={cy} rx={30} ry={26} className="fill-violet/20 stroke-violet" strokeWidth={1.8} strokeDasharray="5 4" />
+        {/* tentativo di girare attorno al taglio: lo interseca per forza */}
+        <circle cx={cx + 30} cy={cy} r={24} className="fill-none stroke-red" strokeWidth={1.5} strokeDasharray="3 4" />
+        <circle cx={cx + 54} cy={cy} r={4} className="fill-red" />
+        <circle cx={cx + 6} cy={cy} r={4} className="fill-red" />
+      </>
+    ),
   },
   {
     title: '$\\C\\setminus[z_0,z_1]$',
     ok: false,
-    why: 'Un circuito può girare attorno al segmento.',
+    why: 'Il segmento è limitato: un circuito abbastanza grande lo circonda senza toccarlo, e il suo interno contiene punti fuori dal dominio.',
     hole: <line x1={cx - 22} y1={cy} x2={cx + 22} y2={cy} className={removed} strokeWidth={5} />,
     loop: loopAround,
   },
