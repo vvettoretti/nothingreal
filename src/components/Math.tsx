@@ -6,6 +6,7 @@ const MACROS = {
   '\\R': '\\mathbb{R}',
   '\\N': '\\mathbb{N}',
   '\\Z': '\\mathbb{Z}',
+  '\\Q': '\\mathbb{Q}',
   '\\Res': '\\operatorname{Res}',
   '\\Ind': '\\operatorname{Ind}',
   '\\Log': '\\operatorname{Log}',
