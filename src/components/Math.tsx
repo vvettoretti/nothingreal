@@ -55,7 +55,7 @@ export function Prose({ children }: { children: string }) {
   return (
     <div className="prose-nr">
       {blocks.map((b, i) => {
-        if (b.startsWith('$$')) return <MB key={i}>{b.replace(/^\$\$|\$\$$/g, '')}</MB>
+        if (b.startsWith('$$') && b.endsWith('$$') && b.indexOf('$$', 2) === b.length - 2) return <MB key={i}>{b.slice(2, -2)}</MB>
         if (b.startsWith('### ')) return <h3 key={i}><Text>{b.slice(4)}</Text></h3>
         const lines = b.split('\n')
         if (lines.every((l) => /^(- |\d+\. )/.test(l))) {

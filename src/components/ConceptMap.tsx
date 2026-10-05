@@ -2,10 +2,10 @@ import { Link } from 'react-router'
 import { Text } from './Math'
 
 type Node = { text: string; to: string }
-type Step = { via?: string; nodes: Node[] }
+export type Step = { via?: string; nodes: Node[] }
 
 // La catena logica del capitolo 1, nell'ordine in cui la costruisce il corso.
-const STEPS: Step[] = [
+export const STEPS_C1: Step[] = [
   { nodes: [{ text: '$f$ derivabile in $z_0$ $\\iff$ $U,V$ differenziabili + C–R', to: '/cauchy-riemann' }] },
   {
     via: '+ $f\'$ continua',
@@ -40,10 +40,35 @@ const STEPS: Step[] = [
   { via: 'sopravvive solo $c_{-1}$', nodes: [{ text: '**Teorema dei residui** ⇒ integrali reali', to: '/residui' }] },
 ]
 
-export default function ConceptMap() {
+// Capitolo 2: dagli spazi di funzioni alla trasformata delle distribuzioni.
+export const STEPS_C2: Step[] = [
+  { nodes: [{ text: '**Spazi normati**, Banach, $L^p$', to: '/spazi-normati' }] },
+  {
+    via: 'Hölder, Young',
+    nodes: [
+      { text: 'convoluzione, $C_0^\\infty$ **densa** in $L^p$', to: '/holder-convoluzione' },
+      { text: 'operatori limitati, duale $(L^p)^*\\cong L^q$', to: '/operatori-duale' },
+    ],
+  },
+  { via: 'prodotto scalare', nodes: [{ text: '**Hilbert**: proiezioni, Bessel, Parseval', to: '/hilbert' }] },
+  { via: 'sistema trigonometrico', nodes: [{ text: '**Serie di Fourier** in $L^2(-L,L)$', to: '/serie-fourier' }] },
+  { via: 'periodo → ∞', nodes: [{ text: '**Trasformata** $\\mathcal F:L^1\\to C^0\\cap L^\\infty$', to: '/trasformata-fourier' }] },
+  {
+    via: 'inversione, densità di $\\mathcal S$',
+    nodes: [
+      { text: '$\\mathcal F:\\mathcal S\\to\\mathcal S$, equazione del calore', to: '/schwartz-calore' },
+      { text: '**Plancherel**: $\\mathcal F$ isometria di $L^2$', to: '/schwartz-calore' },
+    ],
+  },
+  { via: 'funzionali su $\\mathcal D$', nodes: [{ text: '**Distribuzioni**: $T_f$, misure, $\\delta$', to: '/distribuzioni' }] },
+  { via: 'integrazione per parti', nodes: [{ text: 'derivate di tutto: $H\'=\\delta$', to: '/derivate-distribuzioni' }] },
+  { via: '$\\mathcal S$ al posto di $\\mathcal D$', nodes: [{ text: '**$\\mathcal S\'$**: $\\hat\\delta=1$, $\\hat1=\\delta$', to: '/distribuzioni-temperate' }] },
+]
+
+export default function ConceptMap({ steps = STEPS_C1 }: { steps?: Step[] }) {
   return (
     <div className="flex flex-col items-center">
-      {STEPS.map((s, i) => (
+      {steps.map((s, i) => (
         <div key={i} className="flex w-full flex-col items-center">
           {s.via && (
             <div className="flex flex-col items-center py-1.5">

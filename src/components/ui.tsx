@@ -7,10 +7,12 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
 
 /** Pannello con etichetta maiuscola grigia (PIANO Z, PIANO W = F(Z), ...). */
 export function Panel({ label, children, right }: { label: ReactNode; children: ReactNode; right?: ReactNode }) {
+  // con lettere greche, pedici o simboli di funzione il maiuscolo cambierebbe il significato (φ → Φ, fₙ → Fₙ)
+  const keepCase = typeof label === 'string' && /[α-ωϕ_ₐ-ₜ₀-₉ⁿʲ⁻]|[a-z]\(/.test(label)
   return (
     <Card className="flex flex-col p-4 sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-muted">{label}</div>
+        <div className={`text-[13px] font-semibold text-muted ${keepCase ? 'tracking-[0.02em]' : 'uppercase tracking-[0.08em]'}`}>{label}</div>
         {right}
       </div>
       {children}

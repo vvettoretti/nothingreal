@@ -34,6 +34,8 @@ type PlaneProps = {
   res?: number
   axes?: boolean
   labels?: boolean
+  /** suffisso delle etichette sull'asse verticale ('i' per il piano complesso, '' per ℝ²) */
+  yUnit?: string
   onHover?: (z: Complex | null) => void
   onPointerDownWorld?: (z: Complex) => void
   children?: ReactNode
@@ -46,7 +48,7 @@ function niceStep(range: number) {
   return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p
 }
 
-export function Plane({ view, aspect = 1, paint, paintKey, res = 0.6, axes = true, labels = true, onHover, onPointerDownWorld, children }: PlaneProps) {
+export function Plane({ view, aspect = 1, paint, paintKey, res = 0.6, axes = true, labels = true, yUnit = 'i', onHover, onPointerDownWorld, children }: PlaneProps) {
   const wrap = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const svg = useRef<SVGSVGElement>(null)
@@ -131,7 +133,7 @@ export function Plane({ view, aspect = 1, paint, paintKey, res = 0.6, axes = tru
           <g key={'y' + t}>
             <line x1={x - 3} x2={x + 3} y1={py} y2={py} stroke={PALETTE.axis} />
             <text x={Math.max(x - 6, 22)} y={py + 3.5} fill={PALETTE.muted} fontSize={10} textAnchor="end" opacity={0.7}>
-              {Number(t.toFixed(6))}i
+              {Number(t.toFixed(6))}{yUnit}
             </text>
           </g>,
         )

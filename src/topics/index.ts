@@ -66,6 +66,72 @@ export const chapters: Chapter[] = [
       },
     ],
   },
+  {
+    n: 2,
+    title: 'Analisi funzionale, Fourier e distribuzioni',
+    topics: [
+      {
+        slug: 'spazi-normati',
+        title: 'Spazi normati, Banach e Lᵖ',
+        lead: 'Norme, equivalenza in dimensione finita e non, completezza, Lebesgue e gli spazi Lᵖ.',
+        Component: lazy(() => import('./c2/SpaziNormati')),
+      },
+      {
+        slug: 'holder-convoluzione',
+        title: 'Hölder, convoluzione e densità',
+        lead: 'Esponenti coniugati, inclusioni tra Lᵖ, Fubini–Tonelli, Young, mollificatori e densità delle funzioni test.',
+        Component: lazy(() => import('./c2/HolderConvoluzione')),
+      },
+      {
+        slug: 'operatori-duale',
+        title: 'Operatori lineari e spazio duale',
+        lead: 'Continuo = limitato, la norma di un operatore, il duale e la rappresentazione di Riesz.',
+        Component: lazy(() => import('./c2/OperatoriDuale')),
+      },
+      {
+        slug: 'hilbert',
+        title: 'Spazi di Hilbert e serie di Fourier astratta',
+        lead: 'Prodotto scalare, parallelogramma, Pitagora, proiezioni, Bessel, Parseval e sistemi completi.',
+        Component: lazy(() => import('./c2/Hilbert')),
+      },
+      {
+        slug: 'serie-fourier',
+        title: 'Serie di Fourier trigonometriche',
+        lead: 'Estensione periodica, convergenza in L², puntuale e totale, Gibbs, Basilea.',
+        Component: lazy(() => import('./c2/SerieFourier')),
+      },
+      {
+        slug: 'trasformata-fourier',
+        title: 'Trasformata di Fourier in L¹',
+        lead: 'Definizione, continuità, Riemann–Lebesgue, regolarità contro decadimento, convoluzione.',
+        Component: lazy(() => import('./c2/TrasformataFourier')),
+      },
+      {
+        slug: 'schwartz-calore',
+        title: 'Inversione, Schwartz, calore e L²',
+        lead: 'Quando si torna indietro, lo spazio 𝒮, l’equazione del calore e il teorema di Plancherel.',
+        Component: lazy(() => import('./c2/SchwartzCalore')),
+      },
+      {
+        slug: 'distribuzioni',
+        title: 'Funzioni test e distribuzioni',
+        lead: 'Lo spazio 𝒟, funzionali continui, funzioni e misure come distribuzioni, la delta di Dirac.',
+        Component: lazy(() => import('./c2/Distribuzioni')),
+      },
+      {
+        slug: 'derivate-distribuzioni',
+        title: 'Derivate e convergenza in 𝒟′',
+        lead: 'Derivare tutto, salti che diventano delta, traslazioni, dilatazioni, limiti deboli.',
+        Component: lazy(() => import('./c2/DerivateDistribuzioni')),
+      },
+      {
+        slug: 'distribuzioni-temperate',
+        title: 'Distribuzioni temperate e Fourier in 𝒮′',
+        lead: 'Perché 𝒟 non basta, crescita lenta, la trasformata di δ, di 1 e delle onde pure.',
+        Component: lazy(() => import('./c2/Temperate')),
+      },
+    ],
+  },
 ]
 
 export const allTopics = chapters.flatMap((c) => c.topics.map((t, i) => ({ ...t, chapter: c, index: i + 1 })))

@@ -1,7 +1,9 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { PALETTE } from '../lib/color'
 
-export type Series = { points: [number, number][]; color: string; dash?: string; dots?: boolean; width?: number; label?: string }
+export type Series = { points: [number, number][]; color: string; dash?: string; dots?: boolean; width?: number; label?: string; fill?: number; r?: number }
+/** Delta di Dirac disegnata come freccia verticale di altezza (con segno) y nel punto x. */
+export type Spike = { x: number; y: number; color: string; label?: string }
 
 /** Piccolo grafico cartesiano in SVG, con assi e griglia leggera. */
 export function Chart({
@@ -15,6 +17,8 @@ export function Chart({
   yTicks,
   marker,
   bars,
+  spikes,
+  band,
 }: {
   series: Series[]
   x: [number, number]
@@ -25,7 +29,10 @@ export function Chart({
   xTicks?: { v: number; label: string }[]
   yTicks?: { v: number; label: string }[]
   marker?: number
-  bars?: { x: number; y: number; color: string }[]
+  bars?: { x: number; y: number; color: string; w?: number }[]
+  spikes?: Spike[]
+  /** intervallo evidenziato sull'asse x (es. un supporto) */
+  band?: { from: number; to: number; color: string }
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const [W, setW] = useState(0)
@@ -65,20 +72,49 @@ export function Chart({
           <text key={'x' + t.v} x={sx(t.v)} y={height - 10} fontSize={10.5} fill={PALETTE.muted} textAnchor="middle">{t.label}</text>
         ))}
         <line x1={m.l} x2={W - m.r} y1={m.t + ih} y2={m.t + ih} stroke={PALETTE.axis} />
+        {y[0] < 0 && y[1] > 0 && <line x1={m.l} x2={W - m.r} y1={sy(0)} y2={sy(0)} stroke={PALETTE.axis} />}
+        {band && <rect x={sx(Math.max(x[0], band.from))} y={m.t} width={Math.max(0, sx(Math.min(x[1], band.to)) - sx(Math.max(x[0], band.from)))} height={ih} fill={band.color} opacity={0.1} />}
         {bars?.map((b, i) => {
-          const w = Math.max(2, (iw / (x[1] - x[0])) * 0.62)
-          const base = sy(y[0])
+          const w = Math.max(2, (iw / (x[1] - x[0])) * (b.w ?? 0.62))
+          const base = sy(Math.min(y[1], Math.max(y[0], 0)))
           const top = sy(clampY(b.y))
           return <rect key={i} x={sx(b.x) - w / 2} y={Math.min(top, base)} width={w} height={Math.abs(base - top)} rx={2} fill={b.color} opacity={0.85} />
         })}
         {marker !== undefined && <line x1={sx(marker)} x2={sx(marker)} y1={m.t} y2={m.t + ih} stroke={PALETTE.pink} strokeDasharray="4 4" />}
         {series.map((s, i) => {
           const pts = s.points.filter((p) => Number.isFinite(p[1]))
-          const d = pts.map((p, j) => `${j ? 'L' : 'M'}${sx(p[0]).toFixed(1)},${sy(clampY(p[1])).toFixed(1)}`).join('')
+          // i valori non finiti spezzano la curva (salti, asintoti)
+          let d = ''
+          let pen = false
+          for (const p of s.points) {
+            if (!Number.isFinite(p[1])) {
+              pen = false
+              continue
+            }
+            d += `${pen ? 'L' : 'M'}${sx(p[0]).toFixed(1)},${sy(clampY(p[1])).toFixed(1)}`
+            pen = true
+          }
+          const base = sy(Math.min(y[1], Math.max(y[0], 0)))
+          const area = s.fill && pts.length > 1 ? `${d}L${sx(pts[pts.length - 1][0]).toFixed(1)},${base}L${sx(pts[0][0]).toFixed(1)},${base}Z` : ''
           return (
             <g key={i}>
+              {area && <path d={area} fill={s.color} opacity={s.fill} stroke="none" />}
               {!s.dots && <path d={d} fill="none" stroke={s.color} strokeWidth={s.width ?? 2} strokeDasharray={s.dash} strokeLinejoin="round" />}
-              {s.dots && pts.map((p, j) => <circle key={j} cx={sx(p[0])} cy={sy(clampY(p[1]))} r={3} fill={s.color} />)}
+              {s.dots && pts.map((p, j) => <circle key={j} cx={sx(p[0])} cy={sy(clampY(p[1]))} r={s.r ?? 3} fill={s.color} />)}
+            </g>
+          )
+        })}
+        {spikes?.map((sp, i) => {
+          if (sp.x < x[0] || sp.x > x[1] || Math.abs(sp.y) < 1e-9) return null
+          const px = sx(sp.x)
+          const y0 = sy(Math.min(y[1], Math.max(y[0], 0)))
+          const y1 = sy(clampY(sp.y))
+          const dir = y1 < y0 ? 1 : -1
+          return (
+            <g key={'s' + i} stroke={sp.color} fill={sp.color}>
+              <line x1={px} x2={px} y1={y0} y2={y1 + dir * 6} strokeWidth={2.5} />
+              <path d={`M${px},${y1} L${px - 5},${y1 + dir * 9} L${px + 5},${y1 + dir * 9} Z`} stroke="none" />
+              {sp.label && <text x={px + 7} y={y1 + dir * 10} fontSize={11} stroke="none" fontWeight={600}>{sp.label}</text>}
             </g>
           )
         })}
